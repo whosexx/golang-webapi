@@ -1,2 +1,2 @@
 # golang-webapi
- golang webapi template
+ golang iris webapi template
