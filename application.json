@@ -1,0 +1,6 @@
+{
+    "level": "debug",
+    "port": 9000,
+    "mysql": "root:6x@test2018@tcp(172.18.10.41:53306)/test?charset=utf8mb4&parseTime=True&loc=Local",
+    "redis": "redis://:123456@172.18.10.41:56379/0"
+}
