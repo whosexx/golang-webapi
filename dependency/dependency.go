@@ -1,6 +1,6 @@
 package dependency
 
-import "webapi/conf"
+import "golang-webapi/conf"
 
 func GetDependencies(cfg *conf.Conf) []interface{} {
 	return []interface{}{

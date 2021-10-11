@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"webapi/utils"
+	"golang-webapi/utils"
 
 	"github.com/kataras/iris/v12/mvc"
 )

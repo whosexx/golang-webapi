@@ -1,8 +1,8 @@
 package dependency
 
 import (
+	"golang-webapi/conf"
 	"time"
-	"webapi/conf"
 
 	"github.com/gomodule/redigo/redis"
 )

@@ -1,8 +1,8 @@
 package route
 
 import (
-	v1 "webapi/controllers/v1"
-	v2 "webapi/controllers/v2"
+	v1 "golang-webapi/controllers/v1"
+	v2 "golang-webapi/controllers/v2"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"

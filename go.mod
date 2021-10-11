@@ -1,4 +1,4 @@
-module webapi
+module golang-webapi
 
 go 1.17
 

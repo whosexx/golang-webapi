@@ -2,8 +2,8 @@ package v1
 
 import (
 	"fmt"
-	"webapi/model"
-	"webapi/utils"
+	"golang-webapi/model"
+	"golang-webapi/utils"
 
 	"github.com/kataras/iris/v12/mvc"
 )

@@ -1,16 +1,20 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"webapi/conf"
-	"webapi/dependency"
-	"webapi/route"
+	"golang-webapi/conf"
+	"golang-webapi/dependency"
+	"golang-webapi/route"
 
 	"github.com/kataras/iris/v12"
 )
 
 func main() {
-	cfg := conf.ReadConf()
+	t := flag.CommandLine.String("conf", "json", "conf type: json yaml toml")
+	flag.Parse()
+
+	cfg := conf.ReadConf(conf.ParseConfType(*t))
 
 	app := iris.New()
 	app.Logger().SetLevel(cfg.Level)

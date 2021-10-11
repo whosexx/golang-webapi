@@ -1,0 +1,29 @@
+Configuration:
+    Tunneling:
+        AuthToken: ""
+        Bin: ""
+        WebInterface: ""
+        Region: ""
+        Tunnels: []
+    IgnoreServerErrors: []
+    DisableStartupLog: false
+    DisableInterruptHandler: false
+    DisablePathCorrection: false
+    DisablePathCorrectionRedirection: false
+    EnablePathEscape: false
+    EnableOptimizations: false
+    FireMethodNotAllowed: false
+    DisableBodyConsumptionOnUnmarshal: false
+    DisableAutoFireStatusCode: false
+    TimeFormat: Mon, 02 Jan 2006 15:04:05 GMT
+    Charset: UTF-8
+    PostMaxMemory: 33554432
+    LocaleContextKey: iris.locale
+    ViewLayoutContextKey: iris.viewLayout
+    ViewDataContextKey: iris.viewData
+    RemoteAddrHeaders: {}
+    Other: {}
+Level: debug
+Port: 9000
+Mysql: root:6x@test2018@tcp(172.18.10.41:53306)/test?charset=utf8mb4&parseTime=True&loc=Local
+Redis: redis://:123456@172.18.10.41:56379/0

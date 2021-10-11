@@ -2,7 +2,7 @@ package dependency
 
 import (
 	"fmt"
-	"webapi/conf"
+	"golang-webapi/conf"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

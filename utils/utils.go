@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"webapi/conf"
+	"golang-webapi/conf"
 
 	"github.com/gomodule/redigo/redis"
 	"github.com/kataras/iris/v12"

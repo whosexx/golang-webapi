@@ -2,7 +2,7 @@ package v1
 
 import (
 	"fmt"
-	"webapi/utils"
+	"golang-webapi/utils"
 
 	"github.com/gomodule/redigo/redis"
 	"github.com/kataras/iris/v12/mvc"
