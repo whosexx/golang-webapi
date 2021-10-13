@@ -8,6 +8,7 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
+//register url
 func init() {
 	ApiV1Routers["/book"] = new(BookController)
 }
