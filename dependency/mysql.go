@@ -1,13 +1,15 @@
 package dependency
 
 import (
-	"fmt"
 	"golang-webapi/conf"
 
+	"github.com/kataras/golog"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
+
+var loggerDB = golog.New()
 
 func InitDB(cfg *conf.Conf) *gorm.DB {
 	db, err := gorm.Open(mysql.New(mysql.Config{
@@ -19,7 +21,7 @@ func InitDB(cfg *conf.Conf) *gorm.DB {
 
 	if err != nil {
 		msg := "open mysql err:" + err.Error()
-		fmt.Println(msg)
+		loggerDB.Error(msg)
 		panic(msg)
 	}
 

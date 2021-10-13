@@ -14,7 +14,6 @@ type ApiV2Controller struct {
 
 //all router
 func HandleRouterV2(ctx *mvc.Application, dependencies ...interface{}) *mvc.Application {
-	ctx.Register(dependencies...)
 	for k, v := range ApiV2Routers {
 		ctx.Party(k).Handle(v)
 	}
@@ -24,7 +23,5 @@ func HandleRouterV2(ctx *mvc.Application, dependencies ...interface{}) *mvc.Appl
 }
 
 func (api *ApiV2Controller) Get() *utils.ResultInfo {
-	return &utils.ResultInfo{
-		Code:    0,
-		Message: "test api v2"}
+	return utils.OK("test api v2")
 }

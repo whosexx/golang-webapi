@@ -2,12 +2,12 @@ package conf
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/BurntSushi/toml"
+	"github.com/kataras/golog"
 	"github.com/kataras/iris/v12"
 	"gopkg.in/yaml.v3"
 )
@@ -52,6 +52,8 @@ func ParseConfType(t string) ConfType {
 	panic("type err!")
 }
 
+var logger = golog.New()
+
 type Conf struct {
 	iris.Configuration `yaml:"Configuration"`
 
@@ -69,24 +71,24 @@ func ReadConf(t ConfType) *Conf {
 	c.Configuration = iris.DefaultConfiguration()
 	js, err := os.ReadFile(CONF + Extensions[t].Ext)
 	if err != nil {
-		fmt.Println("Open file err:" + err.Error())
+		logger.Error("Open file err:" + err.Error())
 		panic(err)
 	}
 
 	switch t {
 	case JSON:
 		if err = json.Unmarshal(js, &c); err != nil {
-			fmt.Println("read config error.")
+			logger.Error("read config error.")
 			panic(err)
 		}
 	case YAML:
 		if err = yaml.Unmarshal(js, &c); err != nil {
-			fmt.Println("read config error.")
+			logger.Error("read config error.")
 			panic(err)
 		}
 	case TOML:
 		if _, err = toml.Decode(string(js), &c); err != nil {
-			fmt.Println("read config error.")
+			logger.Error("read config error.")
 			panic(err)
 		}
 	}
@@ -101,13 +103,13 @@ func (cfg *Conf) Save(t ConfType, path string) {
 		if js, err := json.MarshalIndent(cfg, "", "	"); err == nil {
 			os.WriteFile(f, js, 0666)
 		} else {
-			fmt.Println(err.Error())
+			logger.Error(err.Error())
 		}
 	case YAML:
 		if js, err := yaml.Marshal(cfg); err == nil {
 			os.WriteFile(f, js, 0666)
 		} else {
-			fmt.Println(err.Error())
+			logger.Error(err.Error())
 		}
 	case TOML:
 		if fs, err := os.Create(f); err == nil {
@@ -115,7 +117,7 @@ func (cfg *Conf) Save(t ConfType, path string) {
 
 			err = toml.NewEncoder(fs).Encode(cfg)
 			if err != nil {
-				fmt.Println(err)
+				logger.Error(err)
 			}
 		}
 	default:

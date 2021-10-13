@@ -3,6 +3,8 @@ package dependency
 import (
 	"golang-webapi/conf"
 	"golang-webapi/services"
+
+	"github.com/kataras/golog"
 )
 
 func GetDependencies(cfg *conf.Conf) []interface{} {
@@ -11,7 +13,7 @@ func GetDependencies(cfg *conf.Conf) []interface{} {
 		cfg,
 		db,
 		InitRedis(cfg),
-
+		golog.New(),
 		services.NewUserService(db),
 	}
 }

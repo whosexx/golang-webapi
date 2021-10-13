@@ -9,6 +9,16 @@ import (
 )
 
 func Handle(app *iris.Application, dependencies ...interface{}) {
-	v1.HandleRouterV1(mvc.New(app.Party("/api/v1")), dependencies...)
-	v2.HandleRouterV2(mvc.New(app.Party("/api/v2")), dependencies...)
+	mApp := mvc.New(app.Party("/"))
+	mApp.Register(dependencies...)
+	mApp.HandleError(func(ctx iris.Context, err error) {
+		// if !utils.IsOK(err) {
+		// 	ctx.Application().Logger().Error(err)
+		// }
+
+		ctx.JSON(err)
+	})
+
+	v1.HandleRouterV1(mApp.Party("/api/v1"))
+	v2.HandleRouterV2(mApp.Party("/api/v2"))
 }

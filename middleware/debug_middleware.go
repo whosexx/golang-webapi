@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/kataras/iris/v12"
@@ -10,9 +9,9 @@ import (
 type RecoverErrorHandler func(ctx iris.Context, err interface{})
 
 var (
-	MaxLength    int                 = 1024 * 32
-	ErrorHandler RecoverErrorHandler = func(ctx iris.Context, err interface{}) {
-		fmt.Println(err)
+	MaxLength      int                 = 1024 * 32
+	RecoverHandler RecoverErrorHandler = func(ctx iris.Context, err interface{}) {
+		ctx.Application().Logger().Error(err)
 		ctx.StatusCode(iris.StatusInternalServerError)
 	}
 )
@@ -27,8 +26,8 @@ func Debug(ctx iris.Context) {
 				return
 			}
 
-			if ErrorHandler != nil {
-				ErrorHandler(ctx, err)
+			if RecoverHandler != nil {
+				RecoverHandler(ctx, err)
 			}
 			ctx.StopExecution()
 

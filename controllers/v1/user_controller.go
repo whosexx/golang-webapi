@@ -26,52 +26,36 @@ func (c *UserController) BeforeActivation(a mvc.BeforeActivation) {
 }
 
 func (user *UserController) Get() *utils.ResultInfo {
+	return utils.ServeErr
 	panic(utils.NotFoundErr)
-	return &utils.ResultInfo{
-		Code:    0,
-		Message: "user controller get.",
-	}
+	// return &utils.ResultInfo{
+	// 	Code:    0,
+	// 	Message: "user controller get.",
+	// }
 }
 
 func (user *UserController) Post() *utils.ResultInfo {
 	u := &model.UserInfo{}
 	if err := user.HttpContext.ReadJSON(u); err != nil {
-		return &utils.ResultInfo{
-			Code:    1000,
-			Message: err.Error(),
-		}
+		return utils.ServeErr.WithMessage(err.Error())
 	}
 
 	if err := user.UserService.Insert(u); err != nil {
-		return &utils.ResultInfo{
-			Code:    1001,
-			Message: err.Error(),
-		}
+		return utils.ServeErr.WithMessage(err.Error())
 	}
 
-	return &utils.ResultInfo{
-		Code:    0,
-		Message: "ok.",
-	}
+	return utils.OK()
 }
 
 func (user *UserController) GetUserByUserId(userId string) *utils.ResultInfo {
 	u := user.UserService.GetUserByUserId(userId)
 	if u == nil {
-		return utils.NewResultInfo(utils.NotFoundErr)
+		return utils.NotFoundErr
 	}
 
-	return &utils.ResultInfo{
-		Code:    0,
-		Message: "ok",
-		Data:    u,
-	}
+	return utils.OK2(u)
 }
 
 func (user *UserController) GetAllUsers() *utils.ResultInfo {
-	return &utils.ResultInfo{
-		Code:    0,
-		Message: "ok",
-		Data:    user.UserService.GetAllUsers(),
-	}
+	return utils.OK2(user.UserService.GetAllUsers())
 }

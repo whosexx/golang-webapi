@@ -14,8 +14,6 @@ type ApiV1Controller struct {
 
 //all router
 func HandleRouterV1(app *mvc.Application, dependencies ...interface{}) *mvc.Application {
-	app.Register(dependencies...)
-
 	app.Handle(new(ApiV1Controller))
 	for k, v := range ApiV1Routers {
 		app.Party(k).Handle(v)
@@ -24,8 +22,5 @@ func HandleRouterV1(app *mvc.Application, dependencies ...interface{}) *mvc.Appl
 }
 
 func (api *ApiV1Controller) Get() *utils.ResultInfo {
-	return &utils.ResultInfo{
-		Code:    0,
-		Message: "test get api v1",
-	}
+	return utils.OK("test get api v1")
 }

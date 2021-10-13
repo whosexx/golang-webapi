@@ -23,13 +23,20 @@ func main() {
 	app.Configure(iris.WithConfiguration(cfg.Configuration))
 
 	app.UseGlobal(middleware.Debug)
-	middleware.ErrorHandler = func(ctx iris.Context, err interface{}) {
+	app.OnAnyErrorCode(func(ctx iris.Context) {
+		if ctx.GetStatusCode() == iris.StatusNotFound {
+			ctx.JSON(utils.NotFoundErr.WithMessage(fmt.Sprintf("route[%v] not found", ctx.Path())))
+		} else {
+			ctx.JSON(utils.ServeErr.WithMessage(fmt.Sprintf("invoke route[%v] err", ctx.Path())))
+		}
+	})
+	middleware.RecoverHandler = func(ctx iris.Context, err interface{}) {
 		ctx.Application().Logger().Warn(fmt.Sprintf("Recovered from a route's Handler('%s'), Exception: %v", ctx.RouteName(), err))
 
 		if ex, ok := err.(*utils.BusinessException); !ok {
-			ctx.JSON(utils.NewResultInfo(utils.ServeErr, fmt.Sprintf("%s: %v", utils.ServeErr.Message, err)))
+			ctx.JSON(utils.ServeErr.WithMessage(fmt.Sprintf("%s: %v", utils.ServeErr.Message, err)))
 		} else {
-			ctx.JSON(utils.NewResultInfo(ex))
+			ctx.JSON(ex)
 		}
 	}
 
