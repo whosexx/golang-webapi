@@ -6,7 +6,7 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-var ApiV2Routers map[string]interface{} = make(map[string]interface{}, 10)
+var ApiV2Routers map[string]interface{} = map[string]interface{}{}
 
 type ApiV2Controller struct {
 	utils.DependencyObject

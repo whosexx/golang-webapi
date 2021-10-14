@@ -15,6 +15,7 @@ type DependencyObject struct {
 	DBContext   *gorm.DB
 	Redis       *redis.Pool
 	Logger      *golog.Logger
+	//Session     *sessions.Session
 }
 
 type ResultInfo struct {

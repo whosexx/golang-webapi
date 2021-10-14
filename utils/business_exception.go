@@ -4,8 +4,8 @@ import "fmt"
 
 var (
 	ok          = NewBusinessException(0, "", "ok")
-	NotFoundErr = NewBusinessException(404, "not found")
-	ServeErr    = NewBusinessException(500, "serve error")
+	NotFoundErr = NewBusinessException(1404, "not found")
+	ServeErr    = NewBusinessException(1500, "serve error")
 )
 
 type BusinessException = ResultInfo

@@ -9,10 +9,18 @@ import (
 type RecoverErrorHandler func(ctx iris.Context, err interface{})
 
 var (
-	MaxLength      int                 = 1024 * 32
+	MaxLength      int                 = 1024 * 8
 	RecoverHandler RecoverErrorHandler = func(ctx iris.Context, err interface{}) {
 		ctx.Application().Logger().Error(err)
 		ctx.StatusCode(iris.StatusInternalServerError)
+	}
+
+	MediaTypes []string = []string{
+		"application/json",
+		"text/xml",
+		"application/xml",
+		"application/x-www-form-urlencoded",
+		"multipart/form-data",
 	}
 )
 

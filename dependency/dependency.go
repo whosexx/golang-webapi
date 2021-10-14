@@ -12,8 +12,11 @@ func GetDependencies(cfg *conf.Conf) []interface{} {
 	return []interface{}{
 		cfg,
 		db,
+
 		InitRedis(cfg),
-		golog.New(),
 		services.NewUserService(db),
+
+		golog.New(),
+		//sessions.New(sessions.Config{Cookie: "session"}).Start,
 	}
 }

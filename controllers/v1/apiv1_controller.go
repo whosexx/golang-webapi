@@ -6,7 +6,11 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-var ApiV1Routers map[string]interface{} = make(map[string]interface{}, 10)
+//register controller
+var ApiV1Routers map[string]interface{} = map[string]interface{}{
+	"/user": new(UserController),
+	"/book": new(BookController),
+}
 
 type ApiV1Controller struct {
 	//	utils.DependencyObject

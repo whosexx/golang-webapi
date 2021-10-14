@@ -2,6 +2,7 @@ package dependency
 
 import (
 	"golang-webapi/conf"
+	"golang-webapi/model"
 
 	"github.com/kataras/golog"
 	"gorm.io/driver/mysql"
@@ -25,7 +26,7 @@ func InitDB(cfg *conf.Conf) *gorm.DB {
 		panic(msg)
 	}
 
-	//create table
-	//db.Migrator().CreateTable(&model.UserInfo{})
+	//create tables
+	db.AutoMigrate(model.Tables...)
 	return db
 }
