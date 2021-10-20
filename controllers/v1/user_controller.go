@@ -60,6 +60,14 @@ func (user *UserController) GetUserByUserId(userId string) *utils.ResultInfo {
 	return utils.OK2(u)
 }
 
+// @Summary 获取用户列表1
+// @Description 获取用户列表2
+// @Tags　学生
+// @Accept application/json
+// @Produce application/json
+// @Success 200 {object} utils.ResultInfo
+// @Failure 200 {object} utils.ResultInfo
+// @Router /api/v1/user/all [get]
 func (user *UserController) GetAllUsers() *utils.ResultInfo {
 	return utils.OK2(user.UserService.GetAllUsers())
 }

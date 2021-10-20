@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"golang-webapi/utils"
 	"time"
 
 	"github.com/kataras/iris/v12"
@@ -39,8 +40,10 @@ func Debug(ctx iris.Context) {
 			}
 			ctx.StopExecution()
 
-			end := time.Now()
-			logger.Infof("请求协议[%v]路由[%v]，IP[%v]，Method[%v]，ContentType[%v]，返回：StatusCode[%v]，Body[%v]，执行耗时：[%v]ms\n", ctx.Request().Proto, ctx.Request().URL, ctx.RemoteAddr(), ctx.Method(), ctx.GetContentType(), ctx.GetStatusCode(), string(ctx.Recorder().Body()), end.Sub(start).Milliseconds())
+			if utils.ContainsString(MediaTypes, ctx.GetContentType(), false) >= 0 {
+				end := time.Now()
+				logger.Infof("请求协议[%v]路由[%v]，IP[%v]，Method[%v]，ContentType[%v]，返回：StatusCode[%v]，Body[%v]，执行耗时：[%v]ms\n", ctx.Request().Proto, ctx.Request().URL, ctx.RemoteAddr(), ctx.Method(), ctx.GetContentType(), ctx.GetStatusCode(), string(ctx.Recorder().Body()), end.Sub(start).Milliseconds())
+			}
 		}
 	}()
 
@@ -52,12 +55,14 @@ func Debug(ctx iris.Context) {
 
 	ctx.Record()
 	ctx.Next()
-	end := time.Now()
 
-	l := len(rBody)
-	if l > 0 && l < MaxLength {
-		logger.Infof("请求协议[%v]路由[%v]，IP[%v]，Method[%v]，ContentType[%v]，Body[%v]，返回：StatusCode[%v]，Body[%v]，执行耗时：[%v]ms\n", ctx.Request().Proto, ctx.Request().URL, ctx.RemoteAddr(), ctx.Method(), ctx.GetContentType(), string(rBody), ctx.GetStatusCode(), string(ctx.Recorder().Body()), end.Sub(start).Milliseconds())
-	} else {
-		logger.Infof("请求协议[%v]路由[%v]，IP[%v]，Method[%v]，ContentType[%v]，返回：StatusCode[%v]，Body[%v]，执行耗时：[%v]ms\n", ctx.Request().Proto, ctx.Request().URL, ctx.RemoteAddr(), ctx.Method(), ctx.GetContentType(), ctx.GetStatusCode(), string(ctx.Recorder().Body()), end.Sub(start).Milliseconds())
+	if utils.ContainsString(MediaTypes, ctx.GetContentType(), false) >= 0 {
+		end := time.Now()
+		l := len(rBody)
+		if l > 0 && l < MaxLength {
+			logger.Infof("请求协议[%v]路由[%v]，IP[%v]，Method[%v]，ContentType[%v]，Body[%v]，返回：StatusCode[%v]，Body[%v]，执行耗时：[%v]ms\n", ctx.Request().Proto, ctx.Request().URL, ctx.RemoteAddr(), ctx.Method(), ctx.GetContentType(), string(rBody), ctx.GetStatusCode(), string(ctx.Recorder().Body()), end.Sub(start).Milliseconds())
+		} else {
+			logger.Infof("请求协议[%v]路由[%v]，IP[%v]，Method[%v]，ContentType[%v]，返回：StatusCode[%v]，Body[%v]，执行耗时：[%v]ms\n", ctx.Request().Proto, ctx.Request().URL, ctx.RemoteAddr(), ctx.Method(), ctx.GetContentType(), ctx.GetStatusCode(), string(ctx.Recorder().Body()), end.Sub(start).Milliseconds())
+		}
 	}
 }

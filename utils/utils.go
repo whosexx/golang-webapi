@@ -1,36 +1,44 @@
 package utils
 
 import (
-	"golang-webapi/conf"
-
-	"github.com/gomodule/redigo/redis"
-	"github.com/kataras/golog"
-	"github.com/kataras/iris/v12"
-	"gorm.io/gorm"
+	"reflect"
+	"strings"
 )
 
-type DependencyObject struct {
-	Conf        *conf.Conf
-	HttpContext iris.Context
-	DBContext   *gorm.DB
-	Redis       *redis.Pool
-	Logger      *golog.Logger
-	//Session     *sessions.Session
+func Contains(array interface{}, val interface{}) (index int) {
+	index = -1
+	switch reflect.TypeOf(array).Kind() {
+	case reflect.Slice:
+		{
+			s := reflect.ValueOf(array)
+			for i := 0; i < s.Len(); i++ {
+				if reflect.DeepEqual(val, s.Index(i).Interface()) {
+					index = i
+					return
+				}
+			}
+		}
+	}
+	return
 }
 
-type ResultInfo struct {
-	Code    int         `json:"code"`
-	Err     string      `json:"error,omitempty"`
-	Message string      `json:"message,omitempty"`
-	Data    interface{} `json:"data,omitempty"`
-}
-
-func (ex *ResultInfo) WithData(data interface{}) *ResultInfo {
-	ex.Data = data
-	return ex
-}
-
-func (ex *ResultInfo) WithMessage(msg string) *ResultInfo {
-	ex.Message = msg
-	return ex
+// ContainsString Returns the index position of the string val in array
+func ContainsString(array []string, val string, _case bool) (index int) {
+	index = -1
+	if _case {
+		for i := 0; i < len(array); i++ {
+			if array[i] == val {
+				index = i
+				return
+			}
+		}
+	} else {
+		for i := 0; i < len(array); i++ {
+			if strings.EqualFold(array[i], val) {
+				index = i
+				return
+			}
+		}
+	}
+	return
 }
