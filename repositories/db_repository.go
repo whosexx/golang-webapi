@@ -3,12 +3,14 @@ package repositories
 import (
 	"github.com/kataras/golog"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type DBRepository interface {
 	Select(dest interface{}, query interface{}, args ...interface{}) error
 	SelectMany(dest interface{}, query interface{}, args ...interface{}) error
 
+	InsertOrUpdate(dest interface{}) error
 	Insert(dest interface{}) error
 	Update(dest interface{}) error
 	Delete(dest interface{}) error
@@ -41,6 +43,16 @@ func (u *DBService) SelectMany(dest interface{}, query interface{}, args ...inte
 		golog.Error(err.Error())
 		return err
 	}
+	return nil
+}
+
+func (u *DBService) InsertOrUpdate(dest interface{}) error {
+	if err := u.DataContext.Clauses(clause.OnConflict{
+		UpdateAll: true,
+	}).Create(dest).Error; err != nil {
+		return err
+	}
+
 	return nil
 }
 
