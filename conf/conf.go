@@ -57,10 +57,11 @@ var logger = golog.New()
 type Conf struct {
 	iris.Configuration `yaml:"Configuration"`
 
-	Level string `json:"level" yaml:"Level" toml:"Level"`
-	Port  int    `json:"port" yaml:"Port" toml:"Port"`
-	MySQL string `json:"mysql,omitempty" yaml:"Mysql" toml:"Mysql"`
-	Redis string `json:"redis,omitempty" yaml:"Redis" toml:"Redis"`
+	AutoMigrate bool   `json:"autoMigrate" yaml:"AutoMigrate" toml:"AutoMigrate"`
+	Level       string `json:"level" yaml:"Level" toml:"Level"`
+	Port        int    `json:"port" yaml:"Port" toml:"Port"`
+	MySQL       string `json:"mysql,omitempty" yaml:"Mysql" toml:"Mysql"`
+	Redis       string `json:"redis,omitempty" yaml:"Redis" toml:"Redis"`
 }
 
 func ReadConf(t ConfType) *Conf {

@@ -1,30 +1,33 @@
 package utils
 
-import "fmt"
+import (
+	"gorm.io/gorm"
+)
 
 var (
-	ok          = NewBusinessException(0, "", "ok")
-	NotFoundErr = NewBusinessException(1404, "not found")
-	ServeErr    = NewBusinessException(1500, "serve error")
+	ok          = NewBusinessException("", "ok")
+	NotFoundErr = NewBusinessException(gorm.ErrRecordNotFound.Error())
+	ServeErr    = NewBusinessException("serve error")
 )
 
 type BusinessException = ResultInfo
 
-func NewBusinessException(code int, err string, msgs ...string) *BusinessException {
+func NewBusinessException(err string, msgs ...string) *BusinessException {
 	msg := ""
 	for _, m := range msgs {
 		msg = msg + m
 	}
+
 	return &BusinessException{
-		Code:    code,
+		//Code:    code,
 		Err:     err,
 		Message: msg,
 	}
 }
 
 func (ex *BusinessException) Error() string {
-	//return ex.Err
-	return fmt.Sprintf("%s(%d)", ex.Err, ex.Code)
+	return ex.Err
+	//return fmt.Sprintf("%s(%d)", ex.Err, ex.Code)
 }
 
 func OK(msgs ...string) *BusinessException {
@@ -45,6 +48,13 @@ func OK2(d interface{}, msgs ...string) *BusinessException {
 	return OK(msgs...).WithData(d)
 }
 
+func Error(d error) *BusinessException {
+	b := ServeErr.Clone()
+
+	b.Message = d.Error()
+	return b
+}
+
 func IsOK(ex error) bool {
 	e, c := ex.(*BusinessException)
 	if !c {
@@ -56,7 +66,7 @@ func IsOK(ex error) bool {
 
 func (ex *BusinessException) Clone() *BusinessException {
 	return &BusinessException{
-		Code:    ex.Code,
+		//Code:    ex.Code,
 		Err:     ex.Err,
 		Message: ex.Message,
 		Data:    ex.Data,

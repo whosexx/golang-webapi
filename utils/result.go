@@ -19,7 +19,7 @@ type DependencyObject struct {
 }
 
 type ResultInfo struct {
-	Code    int         `json:"code"`
+	//Code    int         `json:"code"`
 	Err     string      `json:"error,omitempty"`
 	Message string      `json:"message,omitempty"`
 	Data    interface{} `json:"data,omitempty"`

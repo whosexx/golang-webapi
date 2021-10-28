@@ -27,6 +27,8 @@ func InitDB(cfg *conf.Conf) *gorm.DB {
 	}
 
 	//create tables
-	db.AutoMigrate(model.Tables...)
+	if cfg.AutoMigrate {
+		db.AutoMigrate(model.Tables...)
+	}
 	return db
 }

@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"github.com/kataras/golog"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -15,6 +14,7 @@ type DBRepository interface {
 	Update(dest interface{}) error
 	Delete(dest interface{}) error
 }
+
 type DBService struct {
 	DataContext *gorm.DB
 }
@@ -27,7 +27,6 @@ func NewDBService(db *gorm.DB) *DBService {
 
 func (u *DBService) Select(dest interface{}, query interface{}, args ...interface{}) error {
 	if err := u.DataContext.Where(query, args...).First(dest).Error; err != nil {
-		golog.Error(err.Error())
 		return err
 	}
 	return nil
@@ -40,7 +39,6 @@ func (u *DBService) SelectMany(dest interface{}, query interface{}, args ...inte
 	}
 
 	if err := db.Find(dest).Error; err != nil {
-		golog.Error(err.Error())
 		return err
 	}
 	return nil
@@ -58,7 +56,6 @@ func (u *DBService) InsertOrUpdate(dest interface{}) error {
 
 func (u *DBService) Insert(user interface{}) error {
 	if err := u.DataContext.Create(user).Error; err != nil {
-		golog.Error(err.Error())
 		return err
 	}
 	return nil
@@ -71,7 +68,6 @@ func (u *DBService) Update(user interface{}) error {
 	}
 
 	if err := r.Error; err != nil {
-		golog.Error(err.Error())
 		return err
 	}
 	return nil
@@ -84,7 +80,6 @@ func (u *DBService) Delete(dest interface{}) error {
 	}
 
 	if err := r.Error; err != nil {
-		golog.Error(err.Error())
 		return err
 	}
 

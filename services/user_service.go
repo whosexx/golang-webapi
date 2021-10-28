@@ -4,17 +4,16 @@ import (
 	"golang-webapi/model"
 	"golang-webapi/repositories"
 
-	"github.com/kataras/golog"
 	"gorm.io/gorm"
 )
 
 type UserRepository interface {
 	repositories.DBRepository
 
-	GetAllUsers() []model.UserInfo
+	GetAllUsers() ([]model.UserInfo, error)
 
-	GetUser(uuid string) *model.UserInfo
-	GetUserByUserId(id string) *model.UserInfo
+	GetUser(uuid string) (*model.UserInfo, error)
+	GetUserByUserId(id string) (*model.UserInfo, error)
 }
 
 type userService struct {
@@ -29,41 +28,29 @@ func NewUserService(db *gorm.DB) UserRepository {
 	}
 }
 
-func (u *userService) GetAllUsers() []model.UserInfo {
+func (u *userService) GetAllUsers() ([]model.UserInfo, error) {
 	var users []model.UserInfo
 	if err := u.SelectMany(&users, nil); err != nil {
-		golog.Error(err.Error())
-		return nil
+		return users, err
 	}
-	return users
+
+	return users, nil
 }
 
-func (u *userService) GetUser(uuid string) *model.UserInfo {
+func (u *userService) GetUser(uuid string) (*model.UserInfo, error) {
 	var user model.UserInfo
 	if err := u.Select(&user, "uuid = ?", uuid); err != nil {
-		golog.Error(err.Error())
-		return nil
+		return &user, err
 	}
-	return &user
+
+	return &user, nil
 }
 
-func (u *userService) GetUserByUserId(id string) *model.UserInfo {
+func (u *userService) GetUserByUserId(id string) (*model.UserInfo, error) {
 	var user model.UserInfo
 	if err := u.Select(&user, "userId = ?", id); err != nil {
-		golog.Error(err.Error())
-		return nil
+		return &user, err
 	}
-	return &user
+
+	return &user, nil
 }
-
-// func (u *userService) Delete(dest interface{}, args ...interface{}) error {
-// 	t := []interface{}{"uuid = ?"}
-// 	t = append(t, args...)
-
-// 	if err := u.DBService.Delete(dest, t...); err != nil {
-// 		golog.Error(err.Error())
-// 		return err
-// 	}
-
-// 	return nil
-// }

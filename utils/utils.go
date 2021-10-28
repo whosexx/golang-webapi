@@ -23,22 +23,23 @@ func Contains(array interface{}, val interface{}) (index int) {
 }
 
 // ContainsString Returns the index position of the string val in array
-func ContainsString(array []string, val string, _case bool) (index int) {
+func ContainsString(array []string, val string, ignoreCase bool) (index int) {
 	index = -1
-	if _case {
-		for i := 0; i < len(array); i++ {
-			if array[i] == val {
-				index = i
-				return
-			}
-		}
-	} else {
+	if ignoreCase {
 		for i := 0; i < len(array); i++ {
 			if strings.EqualFold(array[i], val) {
 				index = i
 				return
 			}
 		}
+	} else {
+		for i := 0; i < len(array); i++ {
+			if array[i] == val {
+				index = i
+				return
+			}
+		}
+
 	}
 	return
 }

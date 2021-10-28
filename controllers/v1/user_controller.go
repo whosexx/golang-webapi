@@ -24,9 +24,10 @@ func (c *UserController) BeforeActivation(a mvc.BeforeActivation) {
 }
 
 func (user *UserController) Get(uuid string) *utils.ResultInfo {
-	u := user.UserService.GetUser(uuid)
-	if u == nil {
-		return utils.NotFoundErr
+
+	u, err := user.UserService.GetUser(uuid)
+	if err != nil {
+		return utils.Error(err)
 	}
 
 	return utils.OK2(u)
@@ -52,9 +53,9 @@ func (user *UserController) Post() *utils.ResultInfo {
 }
 
 func (user *UserController) GetUserByUserId(userId string) *utils.ResultInfo {
-	u := user.UserService.GetUserByUserId(userId)
-	if u == nil {
-		return utils.NotFoundErr
+	u, err := user.UserService.GetUserByUserId(userId)
+	if err != nil {
+		return utils.Error(err)
 	}
 
 	return utils.OK2(u)
@@ -69,7 +70,12 @@ func (user *UserController) GetUserByUserId(userId string) *utils.ResultInfo {
 // @Failure 200 {object} utils.ResultInfo
 // @Router /api/v1/user/all [get]
 func (user *UserController) GetAllUsers() *utils.ResultInfo {
-	return utils.OK2(user.UserService.GetAllUsers())
+	u, err := user.UserService.GetAllUsers()
+	if err != nil {
+		return utils.Error(err)
+	}
+
+	return utils.OK2(u)
 }
 
 func (user *UserController) Update() *utils.ResultInfo {

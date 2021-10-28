@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"golang-webapi/utils"
+	"strings"
 	"time"
 
 	"github.com/kataras/iris/v12"
@@ -16,7 +16,7 @@ var (
 		ctx.StatusCode(iris.StatusInternalServerError)
 	}
 
-	MediaTypes []string = []string{
+	MediaTypes StringArray = StringArray{
 		"application/json",
 		"text/xml",
 		"application/xml",
@@ -40,7 +40,7 @@ func Debug(ctx iris.Context) {
 			}
 			ctx.StopExecution()
 
-			if utils.ContainsString(MediaTypes, ctx.GetContentType(), false) >= 0 {
+			if MediaTypes.Contains(ctx.GetContentType(), false) >= 0 {
 				end := time.Now()
 				logger.Infof("请求协议[%v]路由[%v]，IP[%v]，Method[%v]，ContentType[%v]，返回：StatusCode[%v]，Body[%v]，执行耗时：[%v]ms\n", ctx.Request().Proto, ctx.Request().URL, ctx.RemoteAddr(), ctx.Method(), ctx.GetContentType(), ctx.GetStatusCode(), string(ctx.Recorder().Body()), end.Sub(start).Milliseconds())
 			}
@@ -56,7 +56,7 @@ func Debug(ctx iris.Context) {
 	ctx.Record()
 	ctx.Next()
 
-	if utils.ContainsString(MediaTypes, ctx.GetContentType(), false) >= 0 {
+	if MediaTypes.Contains(ctx.GetContentType(), false) >= 0 {
 		end := time.Now()
 		l := len(rBody)
 		if l > 0 && l < MaxLength {
@@ -65,4 +65,26 @@ func Debug(ctx iris.Context) {
 			logger.Infof("请求协议[%v]路由[%v]，IP[%v]，Method[%v]，ContentType[%v]，返回：StatusCode[%v]，Body[%v]，执行耗时：[%v]ms\n", ctx.Request().Proto, ctx.Request().URL, ctx.RemoteAddr(), ctx.Method(), ctx.GetContentType(), ctx.GetStatusCode(), string(ctx.Recorder().Body()), end.Sub(start).Milliseconds())
 		}
 	}
+}
+
+type StringArray []string
+
+func (array StringArray) Contains(val string, ignoreCase bool) (index int) {
+	index = -1
+	if ignoreCase {
+		for i := 0; i < len(array); i++ {
+			if strings.Contains(strings.ToLower(val), strings.ToLower(array[i])) {
+				index = i
+				return
+			}
+		}
+	} else {
+		for i := 0; i < len(array); i++ {
+			if strings.Contains(val, array[i]) {
+				index = i
+				return
+			}
+		}
+	}
+	return
 }
